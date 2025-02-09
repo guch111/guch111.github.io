@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2025/02/09/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>hexo搭建过程遇到的一些问题</title>
+    <url>/2025/02/09/hexo%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="一、ssh-connect-to-host-github-com-port-22-Connection-refused"><a href="#一、ssh-connect-to-host-github-com-port-22-Connection-refused" class="headerlink" title="一、ssh: connect to host github.com port 22: Connection refused"></a>一、ssh: connect to host github.com port 22: Connection refused</h1><p> 修改.ssh文件夹中的config文件（若没有则新建一个）。在文件中加入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、hexo-init-时卡住"><a href="#二、hexo-init-时卡住" class="headerlink" title="二、hexo init 时卡住"></a>二、hexo init 时卡住</h1><p>hexo init</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+
+<p>实际上是运行了如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/hexojs/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
+
+<p>所以，我们可以直接运行如下命令替换原先的<code>hexo init</code>命令，从gitee源做clone</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://gitee.com/weilining/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、hexo-d时报错：ERROR-Deployer-not-found-git"><a href="#三、hexo-d时报错：ERROR-Deployer-not-found-git" class="headerlink" title="三、hexo d时报错：ERROR Deployer not found: git"></a>三、hexo d时报错：ERROR Deployer not found: git</h1><p>运行以下命令安装hexo-deployer-git插件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、hexo-d时报错：spawn-failed，无法推送到github"><a href="#四、hexo-d时报错：spawn-failed，无法推送到github" class="headerlink" title="四、hexo d时报错：spawn failed，无法推送到github"></a>四、hexo d时报错：spawn failed，无法推送到github</h1><p>修改_config.yml配置文件</p>
+<p>原先为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>替换为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>其他</category>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>markdown file quick start</title>
+    <url>/2025/02/09/markdown-file-quick-start/</url>
+    <content><![CDATA[<h1 id="一、标题和段落"><a href="#一、标题和段落" class="headerlink" title="一、标题和段落"></a>一、标题和段落</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">#的数量代表标题的级数</span></span><br><span class="line"></span><br><span class="line">enter换行，代表段落之间更大的间隔</span><br><span class="line"><span class="built_in">shift</span>+enter换行，代表段落之间小的间隔</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、字体"><a href="#二、字体" class="headerlink" title="二、字体"></a>二、字体</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">**粗体**</span><br><span class="line">*斜体*</span><br><span class="line">==高亮==</span><br><span class="line">~~删除线~~</span><br><span class="line">&lt;u&gt;下划线&lt;/u&gt;</span><br><span class="line"></span><br><span class="line">a^上标^b</span><br><span class="line">c~下标~d</span><br><span class="line"></span><br><span class="line">用反斜杠可以打出转义字符，如\*</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、文本逻辑结构"><a href="#三、文本逻辑结构" class="headerlink" title="三、文本逻辑结构"></a>三、文本逻辑结构</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">* 第一点</span><br><span class="line">* 第二点</span><br><span class="line">tab键可以降低当前行的级别</span><br><span class="line"><span class="built_in">shift</span>+tab可以升高当前行的级别</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一点<ul>
+<li>第一点中的第一小点</li>
+</ul>
+</li>
+<li>第二点</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">可以给每一点编号：</span><br><span class="line">1. 第一点</span><br><span class="line">2. 第二点</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>第一点</li>
+<li>第二点</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- [ ] 未完成事项</span><br><span class="line">- [x] 已完成事项</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> 未完成事项</li>
+<li><input checked="" disabled="" type="checkbox"> 已完成事项</li>
+</ul>
+<h1 id="四、代码块"><a href="#四、代码块" class="headerlink" title="四、代码块"></a>四、代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`&lt;code&gt;` 在文本中间插入行内代码</span><br></pre></td></tr></table></figure>
+
+<p>这是一个行内代码<code>int a = 0;</code>的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">```&lt;语言名称&gt; </span><br><span class="line">&lt;code&gt;</span><br><span class="line">```</span><br><span class="line">显示代码块，常用语言名称bash, python, c, c++, verilog等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> test;</span><br><span class="line">    <span class="keyword">wire</span> a;</span><br><span class="line">    <span class="keyword">assign</span> a = <span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>其他</category>
+        <category>Markdown</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+      </tags>
+  </entry>
+</search>
