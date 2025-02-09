@@ -19,40 +19,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>hexo搭建过程遇到的一些问题</title>
-    <url>/2025/02/09/hexo%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="一、ssh-connect-to-host-github-com-port-22-Connection-refused"><a href="#一、ssh-connect-to-host-github-com-port-22-Connection-refused" class="headerlink" title="一、ssh: connect to host github.com port 22: Connection refused"></a>一、ssh: connect to host github.com port 22: Connection refused</h1><p> 修改.ssh文件夹中的config文件（若没有则新建一个）。在文件中加入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure>
-
-<h1 id="二、hexo-init-时卡住"><a href="#二、hexo-init-时卡住" class="headerlink" title="二、hexo init 时卡住"></a>二、hexo init 时卡住</h1><p>hexo init</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
-
-<p>实际上是运行了如下命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/hexojs/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
-
-<p>所以，我们可以直接运行如下命令替换原先的<code>hexo init</code>命令，从gitee源做clone</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://gitee.com/weilining/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
-
-<h1 id="三、hexo-d时报错：ERROR-Deployer-not-found-git"><a href="#三、hexo-d时报错：ERROR-Deployer-not-found-git" class="headerlink" title="三、hexo d时报错：ERROR Deployer not found: git"></a>三、hexo d时报错：ERROR Deployer not found: git</h1><p>运行以下命令安装hexo-deployer-git插件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、hexo-d时报错：spawn-failed，无法推送到github"><a href="#四、hexo-d时报错：spawn-failed，无法推送到github" class="headerlink" title="四、hexo d时报错：spawn failed，无法推送到github"></a>四、hexo d时报错：spawn failed，无法推送到github</h1><p>修改_config.yml配置文件</p>
-<p>原先为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<p>替换为</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>其他</category>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>markdown file quick start</title>
     <url>/2025/02/09/markdown-file-quick-start/</url>
     <content><![CDATA[<h1 id="一、标题和段落"><a href="#一、标题和段落" class="headerlink" title="一、标题和段落"></a>一、标题和段落</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">#的数量代表标题的级数</span></span><br><span class="line"></span><br><span class="line">enter换行，代表段落之间更大的间隔</span><br><span class="line"><span class="built_in">shift</span>+enter换行，代表段落之间小的间隔</span><br></pre></td></tr></table></figure>
@@ -94,6 +60,40 @@
       </categories>
       <tags>
         <tag>Markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo搭建过程遇到的一些问题</title>
+    <url>/2025/02/09/hexo%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="一、ssh-connect-to-host-github-com-port-22-Connection-refused"><a href="#一、ssh-connect-to-host-github-com-port-22-Connection-refused" class="headerlink" title="一、ssh: connect to host github.com port 22: Connection refused"></a>一、ssh: connect to host github.com port 22: Connection refused</h1><p> 修改.ssh文件夹中的config文件（若没有则新建一个）。在文件中加入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、hexo-init-时卡住"><a href="#二、hexo-init-时卡住" class="headerlink" title="二、hexo init 时卡住"></a>二、hexo init 时卡住</h1><p>hexo init</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+
+<p>实际上是运行了如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/hexojs/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
+
+<p>所以，我们可以直接运行如下命令替换原先的<code>hexo init</code>命令，从gitee源做clone</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://gitee.com/weilining/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm config set registry https://registry.npm.taobao.org</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、hexo-d时报错：ERROR-Deployer-not-found-git"><a href="#三、hexo-d时报错：ERROR-Deployer-not-found-git" class="headerlink" title="三、hexo d时报错：ERROR Deployer not found: git"></a>三、hexo d时报错：ERROR Deployer not found: git</h1><p>运行以下命令安装hexo-deployer-git插件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、hexo-d时报错：spawn-failed，无法推送到github"><a href="#四、hexo-d时报错：spawn-failed，无法推送到github" class="headerlink" title="四、hexo d时报错：spawn failed，无法推送到github"></a>四、hexo d时报错：spawn failed，无法推送到github</h1><p>修改_config.yml配置文件</p>
+<p>原先为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>替换为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;Name&gt;/&lt;Name&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>其他</category>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
 </search>
