@@ -95,7 +95,7 @@
 <p>实际上是运行了如下命令</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/hexojs/hexo-starter.git blog</span><br><span class="line">cd blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
 
-<p>所以，我们可以直接运行如下命令替换原先的”hexo init”命令，从gitee源做clone</p>
+<p>所以，我们可以直接运行如下命令替换原先的<code>hexo init</code>命令，从gitee源做clone</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/weilining/hexo-starter.git blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line">npm i</span><br></pre></td></tr></table></figure>
 
 <h1 id="三、hexo-d时报错：ERROR-Deployer-not-found-git"><a href="#三、hexo-d时报错：ERROR-Deployer-not-found-git" class="headerlink" title="三、hexo d时报错：ERROR Deployer not found: git"></a>三、hexo d时报错：ERROR Deployer not found: git</h1><p>运行以下命令安装hexo-deployer-git插件</p>
@@ -147,7 +147,47 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="一、标题和段落"><a href="#一、标题和段落" class="headerlink" title="一、标题和段落"></a>一、标题和段落</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">#的数量代表标题的级数</span></span><br><span class="line"></span><br><span class="line">enter换行，代表段落之间更大的间隔</span><br><span class="line"><span class="built_in">shift</span>+enter换行，代表段落之间小的间隔</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、字体"><a href="#二、字体" class="headerlink" title="二、字体"></a>二、字体</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">**粗体**</span><br><span class="line">*斜体*</span><br><span class="line">==高亮==</span><br><span class="line">~~删除线~~</span><br><span class="line">&lt;u&gt;下划线&lt;/u&gt;</span><br><span class="line"></span><br><span class="line">a^上标^b</span><br><span class="line">c~下标~d</span><br><span class="line"></span><br><span class="line">用反斜杠可以打出转义字符，如\*</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、文本逻辑结构"><a href="#三、文本逻辑结构" class="headerlink" title="三、文本逻辑结构"></a>三、文本逻辑结构</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* 第一点</span><br><span class="line">* 第二点</span><br><span class="line">tab键可以降低当前行的级别</span><br><span class="line"><span class="built_in">shift</span>+tab可以升高当前行的级别</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一点<ul>
+<li>第一点中的第一小点</li>
+</ul>
+</li>
+<li>第二点</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">可以给每一点编号：</span><br><span class="line">1. 第一点</span><br><span class="line">2. 第二点</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>第一点</li>
+<li>第二点</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- [ ] 未完成事项</span><br><span class="line">- [x] 已完成事项</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> 未完成事项</li>
+<li><input checked="" disabled="" type="checkbox"> 已完成事项</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">右箭头&gt;后按空格可以开始分区，并且分区可以嵌套</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>第一层分区<br>一些内容</p>
+<blockquote>
+<p>第二层分区<br>一些内容</p>
+</blockquote>
+</blockquote>
+<h1 id="四、代码块"><a href="#四、代码块" class="headerlink" title="四、代码块"></a>四、代码块</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&lt;code&gt;` 在文本中间插入行内代码</span><br></pre></td></tr></table></figure>
+
+<p>这是一个行内代码<code>int a = 0;</code>的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">```&lt;语言名称&gt; </span><br><span class="line">&lt;code&gt;</span><br><span class="line">```</span><br><span class="line">显示代码块，常用语言名称bash, python, c, c++, verilog等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> test;</span><br><span class="line">    <span class="keyword">wire</span> a;</span><br><span class="line">    <span class="keyword">assign</span> a = <span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer class="article-footer">
