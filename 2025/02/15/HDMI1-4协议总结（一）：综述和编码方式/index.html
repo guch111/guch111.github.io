@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>HDMI1.4协议总结（一）：综述和编码方式 | Chi Gu's Blog</title><meta name="author" content="Chi Gu,guchi_sysu@163.com"><meta name="copyright" content="Chi Gu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="综述一个HDMI传输系统包括发送端（source）和接收端（sink）。如下图所示，HDMI线缆包括以下连接：    由四个差分对组成的主数据通路，包括三个数据通道和一个时钟通道。   VESA DDC，实际上就是一个I2C bus，用于配置和状态信息的传输   CEC（optional），消费电子控制   HEAC，家庭影院系统中音频回传功能   HPD，热插拔检测HDMI物理层的实现不在此次赘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDMI1.4协议总结（一）：综述和编码方式">
+<meta property="og:url" content="http://example.com/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Chi Gu&#39;s Blog">
+<meta property="og:description" content="综述一个HDMI传输系统包括发送端（source）和接收端（sink）。如下图所示，HDMI线缆包括以下连接：    由四个差分对组成的主数据通路，包括三个数据通道和一个时钟通道。   VESA DDC，实际上就是一个I2C bus，用于配置和状态信息的传输   CEC（optional），消费电子控制   HEAC，家庭影院系统中音频回传功能   HPD，热插拔检测HDMI物理层的实现不在此次赘">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/yumaobi.jpg">
+<meta property="article:published_time" content="2025-02-15T14:20:36.000Z">
+<meta property="article:modified_time" content="2025-02-15T15:20:49.788Z">
+<meta property="article:author" content="Chi Gu">
+<meta property="article:tag" content="HDMI1.4">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/yumaobi.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "HDMI1.4协议总结（一）：综述和编码方式",
+  "url": "http://example.com/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/",
+  "image": "http://example.com/images/yumaobi.jpg",
+  "datePublished": "2025-02-15T14:20:36.000Z",
+  "dateModified": "2025-02-15T15:20:49.788Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Chi Gu",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HDMI1.4协议总结（一）：综述和编码方式',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/yumaobi.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Chi Gu's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">HDMI1.4协议总结（一）：综述和编码方式</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">HDMI1.4协议总结（一）：综述和编码方式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-15T14:20:36.000Z" title="发表于 2025-02-15 22:20:36">2025-02-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-15T15:20:49.788Z" title="更新于 2025-02-15 23:20:49">2025-02-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/">协议总结</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/HDMI/">HDMI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span></div></div></div><article class="container post-content" id="article-container"><h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h1><p>一个HDMI传输系统包括发送端（source）和接收端（sink）。如下图所示，HDMI线缆包括以下连接：</p>
+<ul>
+<li>  由四个差分对组成的主数据通路，包括三个数据通道和一个时钟通道。</li>
+<li>  VESA DDC，实际上就是一个I2C bus，用于配置和状态信息的传输</li>
+<li>  CEC（optional），消费电子控制</li>
+<li>  HEAC，家庭影院系统中音频回传功能</li>
+<li>  HPD，热插拔检测<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/HDMI%E6%A1%86%E5%9B%BE.png" alt="HDMI框图"><br>HDMI物理层的实现不在此次赘述，下面直接进入HDMI的数据链路层。</li>
+</ul>
+<h1 id="HDMI信号编码"><a href="#HDMI信号编码" class="headerlink" title="HDMI信号编码"></a>HDMI信号编码</h1><p>HDMI一共有三种传输模式：Control Period传输control data；Data Island Period传输packet data；Video Data Period传输video data。一个HDMI传输帧的例子如下<br>同步信号HSYNC和VSYNC会在特定的行、列位置拉起，用于source和sink之间的同步。可以看到实际传输的帧大小是要大于视频大小（720*480p），包括额外插入了一些行，并且行的长度也得到了扩展，这些扩展的区域被称为blank区（包括Vblank和Hblank），blank区由Control Period和Data Island Period交替填充，其中在Data Island Period会传输音频数据和其他辅助数据（例如像素格式等）。实际传输Video Data Period的区域称为active区，传输我们最终会在显示器上看到的视频图像数据。<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/HDMI%E5%B8%A7%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="HDMI帧示意图"><br>在HDMI clock channel上每一拍时钟（又称为一个TMDS Clock），每个data channel上都会传输10bit的character。这10bit的character，对于不同的数据，由不同的编码方式得到。control data：2 bit -&gt; 10 bit编码；packet data：4 bit -&gt; 10 bit编码（TERC4编码）；video data：8 bit -&gt; 10 bit编码（TMDS编码）。换句话来说，每个TMDS Clock，在每个data channel上，会传输2bit的control data，或者4bit的packet data，或者10bit的control data。这三种数据在data channel上的传输如下图<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/HDMI%E4%BC%A0%E8%BE%93%E8%BF%9E%E6%8E%A5%E5%9B%BE.png" alt="HDMI传输连接图"><br>Control data：在channel 0的2bit数据代表HSYNC和VSYNC，channel 1和channel 2上的4bit数据组合构成CTL0-3，其代表的具体信息在后文介绍。<br>Packet data：channel 0上的4bit数据，由HSYNC、VSYNC以及packet header（这里感觉官方文档给的上面这个示意图不太好，并没有表示其中也包含了HSYNC和VSYNC信息），packet header用于sink判断当前packet的类型（音频包、辅助信息包等）；channel 1和channel 2上传输实际packet信息，如音频包会在这两个channel上传输音频信号采样值。<br>Video data：channel 0到channel 2上总共24bit，均为视频像素数据。</p>
+<p>Data Island Period和Video Data Period的传输均需要遵循一定的规则，使得sink端可以正确识别Packet data和Video Data。其传输时序如下：<br><u>Data Island Period</u>：</p>
+<ul>
+<li>紧贴Data Island Period传输的前后，分别有一个Data Island Guard Band（称为Leading Guard Band和Trailing Guard Band），长度均为2个TMDS Clock。</li>
+<li>在Leading Data Island Guard Band前面，有一个Data Island Preamble，长度为8个TMDS Clock。</li>
+<li>由于HDMI1.4 协议规定，每次发Control Period必须连续发至少12个TMDS Clock。由于Data Island Preamble被视为一种特殊的Control Period，因此在Data Island Preamble前面会有至少连续4 TMDS Clock的Control Period。</li>
+<li>在两个Data Island Guard Band包围起来的中间区域，会发送实际的packet data。每一个packet需要32个TMDS Clock，可以连续发送最少1个，最多18个packet。因此每一个Data Island Period的最小长度为1*32+2*2=36 TMDS Clock（头尾的两个Guard Band也是Data Island Period的一部分）</li>
+</ul>
+<p><u>Video Data Period</u>：</p>
+<ul>
+<li>与Data Island Period类似，有一个长度为2TMDS Clock的Video Data Guard Band，但仅存在与Video Data Period传输最开始（也即只有Leading Guard Band）。</li>
+<li>同样有一个长度为8 TMDS Clock的Video Data Preamble。</li>
+<li>Video Data Preamble前面同样会有至少连续4 TMDS Clock的Control Period。</li>
+<li>Data Island Period和Video Data Period不能紧贴，无论哪一个在前，在前者传输完成后必须传输一段Control Period，才能传输后者。<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/HDMI%E4%BC%A0%E8%BE%93%E9%A1%BA%E5%BA%8F%E5%9B%BE.png" alt="HDMI传输顺序图"></li>
+</ul>
+<h2 id="Control-Period"><a href="#Control-Period" class="headerlink" title="Control Period"></a>Control Period</h2><h3 id="Control-Period-Signal"><a href="#Control-Period-Signal" class="headerlink" title="Control Period Signal"></a>Control Period Signal</h3><p>Control Period在channel 0上传输HSYNC和VSYNC，在channel 1-2上传输CTL0-3。HDMI1.4协议下，CTL0-3主要用于Video Data Preamble和Data Island Preamble传输，以及被sink用作为Character Synchronization（也用于HDCP1.4 EESS信号传输，将在HDCP的文章中介绍）。<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Control_Period_%E4%BF%A1%E5%8F%B7.png" alt="Control_Period_信号"></p>
+<h4 id="Preamble"><a href="#Preamble" class="headerlink" title="Preamble"></a>Preamble</h4><p>Channel 0上的HSYNC和VSYNC在Preamble期间按实际情况正常传输<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Preamble.png" alt="Preamble"></p>
+<h4 id="Character-Synchronization"><a href="#Character-Synchronization" class="headerlink" title="Character Synchronization"></a>Character Synchronization</h4><p><em>注：TMDS Character是指每次编码后，每个TMDS Clock传输的10 bit值。</em><br>经过编码后，Video Data Period和Data Island Period的每个character会包含5次或者更少的1-&gt;0或0-&gt;1跳转，而Control Period会包含7次或更多的跳转。基于此，正如上文一提到的要求，source端的每次Control Period需要持续12个TMDS Clocks，而sink端的解码器应该能识别到这样连续的Contral Period传输，从而同步到Character边界。Sink端的检测算法实现由其自行决定，不在HDMI1.4协议中做要求<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Control_Period_%E8%A6%81%E6%B1%82.png" alt="Control_Period_要求"><br>每隔一定时间间隔（至少50毫秒一次），source端还被要求要发一个持续时间更长（32 TMDS Clocks）的Control Period，被称为Extended Control Period.<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Extend_Control_Period_%E8%A6%81%E6%B1%82.png" alt="Extend_Control_Period_要求"></p>
+<h3 id="Control-Period-Encoding"><a href="#Control-Period-Encoding" class="headerlink" title="Control Period Encoding"></a>Control Period Encoding</h3><p><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Control_Period_%E7%BC%96%E7%A0%81.png" alt="Control_Period_编码"></p>
+<h2 id="Data-Island-Period"><a href="#Data-Island-Period" class="headerlink" title="Data Island Period"></a>Data Island Period</h2><h3 id="Data-Island-Signal"><a href="#Data-Island-Signal" class="headerlink" title="Data Island Signal"></a>Data Island Signal</h3><p>对于Data Island Period（包括对应的Guard Band）的传输，channel 0中的D0和D1分别传输HSYNC 和VSYNC，D2传输Packet Header（在Guard Band区域固定传输1），D3在Leading Guard Band后的第一个TMDS Clock传输0，在其他TMDS Clock（包括Guard Band）传输1（见上面Figure5-3）。channel 1和channel2的总计8bit用于传输Packet Data（Guard Band区域会传输固定的10 bits character）。</p>
+<h4 id="Data-Island-Guard-Band"><a href="#Data-Island-Guard-Band" class="headerlink" title="Data Island Guard Band"></a>Data Island Guard Band</h4><p>Data Island Guard Band时，channel 1和channel 2被直接编码为实际HDMI Lane上固定的10 bit Character，如下：<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Data_Island_GB.png" alt="Data_Island_GB"><br>channel 0上，基于上文，D2和D3被固定为1，因此，依据HSYNC和VSYNC的取值，channel 0上D[3:0]可能的取值为0xC，0xD，0xE，0xF。channel 0上的D[3:0]通过TERC4编码为10bit character。</p>
+<h4 id="Data-Island-Packet"><a href="#Data-Island-Packet" class="headerlink" title="Data Island Packet"></a>Data Island Packet</h4><h5 id="Packet-结构"><a href="#Packet-结构" class="headerlink" title="Packet 结构"></a>Packet 结构</h5><p>每一个Packet需要32个TMDS Clocks传输，由Packet Header和Packet Body（包含4个Subpackets），以及相应的纠错位（error correction bits）组成。每一个Subpacket包含56bits，并由一个8bits的BCH ECC奇偶校验位（parity bits）保护。<br>Subpacket 0加上其对应的校验位组成BCH Block 0，其他的BCH Block 1-3也是类似的；BCH Block0-3经过映射之后在channel 1和channel 2上传输。24 bits的Packet Header加上对应的8 bits校验位构成BCH Block4，经过映射后在channel 0的D2上传输。这些传输映射关系如下图所示：<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Packet%E7%BB%93%E6%9E%84.png" alt="Packet结构"><br>Packet Header的24bits又分为3个Header Bytes：HB0，HB1，HB2。每一个Subpacket的56bits又分为7个Subpacket Bytes：SB0，SB1，……，SB6。<br>Subpacket0上的SB0-SB6，对应地映射为Packet Bytes，PB0-PB6。以此类推，Subpacket1，2，3上的SB0-SB6，分别映射为PB7-PB13，PB14-PB20，PB21-PB27。</p>
+<h5 id="纠错位计算"><a href="#纠错位计算" class="headerlink" title="纠错位计算"></a>纠错位计算</h5><p>纠错位计算采用BCH(64,56)和BCH(32,24)，纠错位生成器使用的多项式和框图如下所示，具体BCH的原理和计算不在此处赘述。<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Packet%E7%BA%A0%E9%94%99%E4%BD%8D.png" alt="Packet纠错位"></p>
+<h5 id="Packet-Header和Packet-Body的定义"><a href="#Packet-Header和Packet-Body的定义" class="headerlink" title="Packet Header和Packet Body的定义"></a>Packet Header和Packet Body的定义</h5><p>详见后续HDMI1.4协议系列文章。</p>
+<h3 id="Data-Island-Period-编码：TERC4"><a href="#Data-Island-Period-编码：TERC4" class="headerlink" title="Data Island Period 编码：TERC4"></a>Data Island Period 编码：TERC4</h3><p><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/TERC4.png" alt="TERC4"></p>
+<h2 id="Video-Data-Period"><a href="#Video-Data-Period" class="headerlink" title="Video Data Period"></a>Video Data Period</h2><h3 id="Video-Data-Period-Signal"><a href="#Video-Data-Period-Signal" class="headerlink" title="Video Data Period Signal"></a>Video Data Period Signal</h3><p>对于Video Data Period的传输，Guard Band时三个channel上都会传输固定的10 bits character，而在active区域传输视频像素时，3个channel上的D[7:0]都传输了8bits的像素数据。 </p>
+<h4 id="Video-Data-Guard-Band"><a href="#Video-Data-Guard-Band" class="headerlink" title="Video Data Guard Band"></a>Video Data Guard Band</h4><p><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/Video_Data_GB.png" alt="Video_Data_GB"></p>
+<h4 id="Pixel-Data"><a href="#Pixel-Data" class="headerlink" title="Pixel Data"></a>Pixel Data</h4><p>详见后续HDMI1.4协议系列文章。</p>
+<h3 id="Video-Data-Period编码：TMDS"><a href="#Video-Data-Period编码：TMDS" class="headerlink" title="Video Data Period编码：TMDS"></a>Video Data Period编码：TMDS</h3><p>每个channel上的8bits Video Data会被编码为10 bits character，编码原则是实现尽可能的直流平衡（1和0的数量差距尽可能小），以及尽可能减小1和0之间的跳变。编码流程包括两步：第一步是对8bits编码得到最小化跳变的9bits，第二步是将9bits编码为直流平衡的10bits character。<br>第一步8-&gt;9bits的编码：9bits code的LSb等于输入的8bits的LSB，随后的7bit，每一bit的计算都基于如下公式: output[n] = input[n] OR output[n-1]，或output[n] = input[n] NOR output[n-1]。具体计算选择XOR（异或）还是XNOR（同或），取决于哪种模式编码得到的9bits code中的跳变更少（算法使用的判断条件如下流程图所示）。9bits code的MSb用于指示当前编码使用的是OR还是NOR。<br>第二步9-&gt;10bits的编码：实现数据流的直流平衡。添加一个第10bit的最高位，以指示是否对数据进行按位取反。编码器基于目前已传输的数据流中0和1的数量差异，以及当前character已编码的低8bits的0和1的数量差异，决定是否进行取反。<br>所有的编码流程如下图所示。整个编码会产生460种不同的10 bits characters。在编码器正确工作的情况下，不应在Video Data Period产生其他的characters。<br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/TMDS1.png" alt="TMDS1"><br><img src="/images/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/TMDS2.png" alt="TMDS2"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Chi Gu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/">http://example.com/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Chi Gu's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/HDMI1-4/">HDMI1.4</a></div><div class="post-share"><div class="social-share" data-image="/images/yumaobi.jpg" data-sites="wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/yumaobi.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Chi Gu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/guch111" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:guchi_sysu@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%BC%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">综述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HDMI%E4%BF%A1%E5%8F%B7%E7%BC%96%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">HDMI信号编码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Control-Period"><span class="toc-number">2.1.</span> <span class="toc-text">Control Period</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Control-Period-Signal"><span class="toc-number">2.1.1.</span> <span class="toc-text">Control Period Signal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Preamble"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">Preamble</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Character-Synchronization"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">Character Synchronization</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Control-Period-Encoding"><span class="toc-number">2.1.2.</span> <span class="toc-text">Control Period Encoding</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Data-Island-Period"><span class="toc-number">2.2.</span> <span class="toc-text">Data Island Period</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Island-Signal"><span class="toc-number">2.2.1.</span> <span class="toc-text">Data Island Signal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-Island-Guard-Band"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">Data Island Guard Band</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-Island-Packet"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">Data Island Packet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Packet-%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.1.2.1.</span> <span class="toc-text">Packet 结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BA%A0%E9%94%99%E4%BD%8D%E8%AE%A1%E7%AE%97"><span class="toc-number">2.2.1.2.2.</span> <span class="toc-text">纠错位计算</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Packet-Header%E5%92%8CPacket-Body%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.1.2.3.</span> <span class="toc-text">Packet Header和Packet Body的定义</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Island-Period-%E7%BC%96%E7%A0%81%EF%BC%9ATERC4"><span class="toc-number">2.2.2.</span> <span class="toc-text">Data Island Period 编码：TERC4</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-Data-Period"><span class="toc-number">2.3.</span> <span class="toc-text">Video Data Period</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Video-Data-Period-Signal"><span class="toc-number">2.3.1.</span> <span class="toc-text">Video Data Period Signal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Video-Data-Guard-Band"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">Video Data Guard Band</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pixel-Data"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">Pixel Data</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Video-Data-Period%E7%BC%96%E7%A0%81%EF%BC%9ATMDS"><span class="toc-number">2.3.2.</span> <span class="toc-text">Video Data Period编码：TMDS</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/15/HDMI1-4%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E7%BB%BC%E8%BF%B0%E5%92%8C%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F/" title="HDMI1.4协议总结（一）：综述和编码方式">HDMI1.4协议总结（一）：综述和编码方式</a><time datetime="2025-02-15T14:20:36.000Z" title="发表于 2025-02-15 22:20:36">2025-02-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/09/hexo%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" title="hexo搭建过程遇到的一些问题">hexo搭建过程遇到的一些问题</a><time datetime="2025-02-09T09:54:30.000Z" title="发表于 2025-02-09 17:54:30">2025-02-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/09/markdown-file-quick-start/" title="markdown file quick start">markdown file quick start</a><time datetime="2025-02-09T09:53:30.000Z" title="发表于 2025-02-09 17:53:30">2025-02-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Chi Gu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="点此搜索" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
